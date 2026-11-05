@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { runsApi, type RunResponse, type RunStatus, type RunCreate } from "../api/client";
 import { th } from "../i18n/th";
+import { Page3SchedulerSkeleton } from "../components/Skeleton";
 
 const statusLabels: Record<RunStatus, string> = {
   queued: th.runStatus.queued,
@@ -103,19 +104,9 @@ export function Page3Scheduler() {
 
   const selectedRun = (runs?.runs || []).find((r) => r.id === selectedRunId) || runs?.runs?.[0] || null;
 
+  // Show skeleton while loading
   if (isLoading) {
-    return (
-      <div className="sl-enter">
-        <header className="sl-main__head">
-          <div>
-            <p className="sl-label">{th.appName.toUpperCase()}</p>
-            <h1>{th.schedulerTitle}</h1>
-            <p>{th.schedulerDescription}</p>
-          </div>
-        </header>
-        <section className="sl-card"><p>{th.loading}</p></section>
-      </div>
-    );
+    return <Page3SchedulerSkeleton />;
   }
 
   return (

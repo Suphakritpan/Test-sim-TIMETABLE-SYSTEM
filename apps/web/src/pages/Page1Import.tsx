@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { UploadCloud, FileUp, Download, CheckCircle2, XCircle } from "lucide-react";
 import { apiClient, importApi, type ImportPreviewResponse, type ImportError } from "../api/client";
 import { th } from "../i18n/th";
+import { Page1ImportSkeleton } from "../components/Skeleton";
 
 export function Page1Import() {
   const navigate = useNavigate();
@@ -68,6 +69,11 @@ export function Page1Import() {
   const formatSeverity = (severity: ImportError["severity"]) =>
     severity === "error" ? th.severityError : th.severityWarning;
 
+  // Show skeleton while preview mutation is pending (initial load)
+  if (previewMutation.isPending && !preview) {
+    return <Page1ImportSkeleton />;
+  }
+
   return (
     <div className="sl-enter">
       <header className="sl-main__head">
@@ -125,13 +131,13 @@ export function Page1Import() {
               <h4 style={{ marginBottom: "var(--space-3)" }}>แผ่นงานที่ต้องมี</h4>
               <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
                 {[
-                  { name: "ครู", found: preview?.summary.teachers > 0 },
-                  { name: "ไม่สะดวก", found: preview?.summary.specialRequests > 0 },
-                  { name: "ห้อง", found: preview?.summary.rooms > 0 },
-                  { name: "กลุ่ม", found: preview?.summary.groups > 0 },
-                  { name: "รายวิชา ท-ป-น", found: preview?.summary.subjects > 0 },
-                  { name: "คำขอพิเศษ", found: preview?.summary.specialRequests > 0 },
-                  { name: "รายการสอน", found: preview?.summary.teachingItems > 0 },
+                  { name: "ครู", found: (preview?.summary?.teachers ?? 0) > 0 },
+                  { name: "ไม่สะดวก", found: (preview?.summary?.specialRequests ?? 0) > 0 },
+                  { name: "ห้อง", found: (preview?.summary?.rooms ?? 0) > 0 },
+                  { name: "กลุ่ม", found: (preview?.summary?.groups ?? 0) > 0 },
+                  { name: "รายวิชา ท-ป-น", found: (preview?.summary?.subjects ?? 0) > 0 },
+                  { name: "คำขอพิเศษ", found: (preview?.summary?.specialRequests ?? 0) > 0 },
+                  { name: "รายการสอน", found: (preview?.summary?.teachingItems ?? 0) > 0 },
                 ].map((item, i) => (
                   <li key={i} style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", fontSize: "14px" }}>
                     {item.found ? <CheckCircle2 size={16} color="var(--accent)" /> : <XCircle size={16} color="var(--danger)" />}

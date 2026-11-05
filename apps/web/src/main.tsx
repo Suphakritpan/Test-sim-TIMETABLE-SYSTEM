@@ -5,6 +5,7 @@ import "@fontsource/ibm-plex-sans-thai/400.css";
 import "@fontsource/ibm-plex-sans-thai/600.css";
 import { QueryProvider } from "./providers/QueryProvider";
 import { AppRouter } from "./router";
+import { AppStateProvider } from "./contexts/AppStateContext";
 import "./styles/tokens.css";
 import "./styles/components.css";
 
@@ -16,7 +17,9 @@ if (!root) {
 createRoot(root).render(
   <StrictMode>
     <QueryProvider>
-      <AppRouter />
+      <AppStateProvider>
+        <AppRouter />
+      </AppStateProvider>
     </QueryProvider>
   </StrictMode>
 );

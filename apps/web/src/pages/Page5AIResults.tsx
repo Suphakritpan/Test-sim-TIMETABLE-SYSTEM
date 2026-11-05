@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { runsApi, type ComparisonResult } from "../api/client";
 import { th } from "../i18n/th";
+import { Page5AIResultsSkeleton } from "../components/Skeleton";
 
 export function Page5AIResults() {
   const queryClient = useQueryClient();
   const [selectedRunId, setSelectedRunId] = useState<string>("");
 
-  const { data: runs } = useQuery({
+  const { data: runs, isLoading } = useQuery({
     queryKey: ["runs"],
     queryFn: () => runsApi.list(),
   });
@@ -24,6 +25,11 @@ export function Page5AIResults() {
     queryFn: () => runsApi.compare(selectedRunId),
     enabled: !!selectedRunId,
   });
+
+  // Show skeleton while runs are loading
+  if (isLoading) {
+    return <Page5AIResultsSkeleton />;
+  }
 
   const verifiedRuns = runs?.runs?.filter((r) => r.status === "verified") || [];
 

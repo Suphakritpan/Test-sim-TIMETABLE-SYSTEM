@@ -18,6 +18,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { timetableApi, runsApi, type TimetableViewResponse, type TimetableCell, type ViewKind } from "../api/client";
 import { th } from "../i18n/th";
+import { Page4TimetableSkeleton } from "../components/Skeleton";
 
 const DAYS = [th.monday, th.tuesday, th.wednesday, th.thursday, th.friday];
 
@@ -276,19 +277,9 @@ export function Page4Timetable() {
     );
   }
 
+  // Show skeleton while loading
   if (isLoading) {
-    return (
-      <div className="sl-enter">
-        <header className="sl-main__head">
-          <div>
-            <p className="sl-label">{th.appName.toUpperCase()}</p>
-            <h1>{th.timetableTitle}</h1>
-            <p>{th.timetableDescription}</p>
-          </div>
-        </header>
-        <section className="sl-card"><p>{th.loading}</p></section>
-      </div>
-    );
+    return <Page4TimetableSkeleton />;
   }
 
   const grid = timetable?.grid;

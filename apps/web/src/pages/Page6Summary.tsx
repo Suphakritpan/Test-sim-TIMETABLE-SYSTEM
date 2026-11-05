@@ -2,16 +2,17 @@ import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { runsApi, type SummaryResponse, type RunResponse } from "../api/client";
 import { th } from "../i18n/th";
+import { Page6SummarySkeleton } from "../components/Skeleton";
 
 export function Page6Summary() {
   const [selectedRunId, setSelectedRunId] = useState<string>("");
 
-  const { data: runs } = useQuery({
+  const { data: runs, isLoading: runsLoading } = useQuery({
     queryKey: ["runs"],
     queryFn: () => runsApi.list(),
   });
 
-  const { data: summary, isLoading } = useQuery({
+  const { data: summary, isLoading: summaryLoading } = useQuery({
     queryKey: ["summary", selectedRunId],
     queryFn: () => runsApi.summary(selectedRunId),
     enabled: !!selectedRunId,
@@ -40,6 +41,11 @@ export function Page6Summary() {
       window.URL.revokeObjectURL(url);
     },
   });
+
+  // Show skeleton while runs are loading
+  if (runsLoading) {
+    return <Page6SummarySkeleton />;
+  }
 
   const verifiedRuns = runs?.runs?.filter((r) => r.status === "verified" || r.status === "infeasible") || [];
 
@@ -97,8 +103,8 @@ export function Page6Summary() {
         </div>
       </section>
 
-      {selectedRunId && isLoading && (
-        <section className="sl-card"><p>{th.loading}</p></section>
+      {selectedRunId && summaryLoading && (
+        <Page6SummarySkeleton />
       )}
 
       {summary && (

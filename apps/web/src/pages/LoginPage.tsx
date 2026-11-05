@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { authApi, apiClient } from "../api/client";
 import { useAuthStore } from "../hooks/useAuthStore";
 import { th } from "../i18n/th";
+import { LoginPageSkeleton } from "../components/Skeleton";
 
 export function LoginPage() {
   const navigate = useNavigate();

@@ -145,7 +145,29 @@
 .sl-dialog--in { animation: sl-pop var(--dur-med) var(--ease-out) both; }
 @keyframes sl-pop { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
 
-/* ---------- Reduced Motion ---------- */
+/* ---------- Skeleton Loading ---------- */
+.sl-skeleton { background: linear-gradient(90deg, var(--glass-strong) 25%, var(--glass) 50%, var(--glass-strong) 75%); background-size: 200% 100%; animation: sl-skeleton var(--dur-slow) var(--ease-out) infinite; border-radius: var(--radius-md); }
+.sl-skeleton--card { border-radius: var(--radius-2xl); }
+.sl-skeleton--circle { border-radius: 50%; }
+.sl-skeleton--pill { border-radius: var(--radius-pill); }
+.sl-skeleton--text { height: 1rem; }
+.sl-skeleton--title { height: 1.75rem; }
+.sl-skeleton--avatar { width: 48px; height: 48px; }
+.sl-skeleton--icon { width: 22px; height: 22px; }
+.sl-skeleton--btn { height: 40px; width: 140px; }
+.sl-skeleton--input { height: 44px; }
+.sl-skeleton--cell { height: 64px; border-radius: var(--radius-md); }
+.sl-skeleton--meta { height: 1.5rem; }
+.sl-skeleton--badge { height: 22px; width: 80px; border-radius: var(--radius-pill); }
+.sl-skeleton--stat { height: 2rem; width: 80px; }
+.sl-skeleton--progress { height: 10px; border-radius: var(--radius-pill); }
+
+@keyframes sl-skeleton {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .sl-skeleton { animation: none; background: var(--glass); }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
