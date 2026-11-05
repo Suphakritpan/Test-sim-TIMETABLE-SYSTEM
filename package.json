@@ -1,0 +1,26 @@
+{
+  "name": "timetable-system",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "ingest": "node src/ingest/cli.mjs --pdf \"start folder/guideline.pdf\" --xlsx \"start folder/data.xlsx\" --out output",
+    "engine": "node src/engine/cli.mjs",
+    "test": "node --test \"conflict tools/validate.test.mjs\" \"rating tools/rating-tools.test.mjs\" \"src/ingest/ingest.test.mjs\" \"src/engine/engine.test.mjs\"",
+    "check:stack": "node \"rating tools/check_techstack.mjs\" --write-report",
+    "score:criteria": "node \"rating tools/score.mjs\""
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.0.4",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "vite": "^7.1.7",
+    "xlsx": "^0.18.5"
+  }
+}
