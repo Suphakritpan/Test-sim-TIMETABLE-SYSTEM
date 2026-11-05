@@ -17,7 +17,7 @@ export function Page2Requests() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editData, setEditData] = useState<Partial<SpecialRequest> | null>(null);
 
-  const { data: requests, isLoading } = useQuery({
+  const { data: requests, isLoading, isError, error } = useQuery({
     queryKey: ["requests"],
     queryFn: () => requestsApi.list(),
   });
@@ -109,6 +109,28 @@ export function Page2Requests() {
           </div>
         </header>
         <section className="sl-card"><p>{th.loading}</p></section>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="sl-enter">
+        <header className="sl-main__head">
+          <div>
+            <p className="sl-label">{th.appName.toUpperCase()}</p>
+            <h1>{th.requestsTitle}</h1>
+            <p>{th.requestsDescription}</p>
+          </div>
+        </header>
+        <section className="sl-card sl-empty">
+          <div className="sl-empty__ic" aria-hidden="true">⚠️</div>
+          <h2>เกิดข้อผิดพลาดในการโหลดข้อมูล</h2>
+          <p className="sl-help">{error?.message || "ไม่สามารถดึงข้อมูลคำขอได้ กรุณาลองใหม่อีกครั้ง"}</p>
+          <button className="sl-btn sl-btn--pri" onClick={() => queryClient.invalidateQueries({ queryKey: ["requests"] })}>
+            ลองใหม่อีกครั้ง
+          </button>
+        </section>
       </div>
     );
   }
@@ -256,7 +278,7 @@ export function Page2Requests() {
           </div>
         )}
 
-        {requests && requests.length > 0 && (
+        {Array.isArray(requests) && requests.length > 0 && (
           <div className="sl-tablewrap">
             <table className="sl-table">
               <thead>

@@ -41,7 +41,7 @@ export function Page6Summary() {
     },
   });
 
-  const verifiedRuns = runs?.runs.filter((r) => r.status === "verified" || r.status === "infeasible") || [];
+  const verifiedRuns = runs?.runs?.filter((r) => r.status === "verified" || r.status === "infeasible") || [];
 
   if (verifiedRuns.length === 0) {
     return (

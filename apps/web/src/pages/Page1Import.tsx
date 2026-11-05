@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { UploadCloud, FileUp, Download, CheckCircle2, XCircle } from "lucide-react";
 import { apiClient, importApi, type ImportPreviewResponse, type ImportError } from "../api/client";
 import { th } from "../i18n/th";
 
@@ -71,7 +72,7 @@ export function Page1Import() {
     <div className="sl-enter">
       <header className="sl-main__head">
         <div>
-          <p className="sl-label">{th.appName.toUpperCase()}</p>
+          <p className="sl-label">ขั้นที่ 1 จาก 6</p>
           <h1>{th.importTitle}</h1>
           <p>{th.importDescription}</p>
         </div>
@@ -84,29 +85,63 @@ export function Page1Import() {
 
       {activeTab === "upload" && (
         <section className="sl-card">
-          <div
-            className={`sl-card ${dragActive ? "is-hover" : ""}`}
-            onDragEnter={handleDrag}
-            onDragOver={handleDrag}
-            onDragLeave={handleDrag}
-            onDrop={handleDrop}
-            style={{ cursor: "pointer" }}
-          >
-            <input
-              type="file"
-              id="file-upload"
-              accept=".xlsx"
-              onChange={handleFileChange}
-              style={{ display: "none" }}
-            />
-            <label htmlFor="file-upload" style={{ cursor: "pointer", width: "100%", display: "block" }}>
-              <div className="sl-empty" style={{ minHeight: "200px" }}>
-                <div className="sl-empty__ic" aria-hidden="true">📁</div>
-                <h2>{th.uploadFile}</h2>
-                <p className="sl-help">{th.dragDropHint}</p>
-              </div>
-            </label>
+          <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "var(--space-4)" }} className="sl-responsive-grid">
+            <div
+              className={`sl-card ${dragActive ? "is-hover" : ""}`}
+              onDragEnter={handleDrag}
+              onDragOver={handleDrag}
+              onDragLeave={handleDrag}
+              onDrop={handleDrop}
+              style={{ cursor: "pointer", border: "var(--border-std) dashed var(--line-strong)", background: "transparent" }}
+            >
+              <input
+                type="file"
+                id="file-upload"
+                accept=".xlsx"
+                onChange={handleFileChange}
+                style={{ display: "none" }}
+              />
+              <label htmlFor="file-upload" style={{ cursor: "pointer", width: "100%", display: "block" }}>
+                <div className="sl-empty" style={{ minHeight: "200px" }}>
+                  <div style={{ 
+                    width: "48px", 
+                    height: "48px", 
+                    borderRadius: "50%", 
+                    background: "var(--accent-soft)", 
+                    display: "flex", 
+                    alignItems: "center", 
+                    justifyContent: "center", 
+                    marginBottom: "var(--space-3)" 
+                  }}>
+                    <UploadCloud size={22} color="var(--accent)" />
+                  </div>
+                  <h2>{th.uploadFile}</h2>
+                  <p className="sl-help">{th.dragDropHint}</p>
+                </div>
+              </label>
+            </div>
+
+            <div className="sl-card--flat" style={{ padding: "var(--space-3)", background: "var(--glass-strong)" }}>
+              <h4 style={{ marginBottom: "var(--space-3)" }}>แผ่นงานที่ต้องมี</h4>
+              <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
+                {[
+                  { name: "ครู", found: preview?.summary.teachers > 0 },
+                  { name: "ไม่สะดวก", found: preview?.summary.specialRequests > 0 },
+                  { name: "ห้อง", found: preview?.summary.rooms > 0 },
+                  { name: "กลุ่ม", found: preview?.summary.groups > 0 },
+                  { name: "รายวิชา ท-ป-น", found: preview?.summary.subjects > 0 },
+                  { name: "คำขอพิเศษ", found: preview?.summary.specialRequests > 0 },
+                  { name: "รายการสอน", found: preview?.summary.teachingItems > 0 },
+                ].map((item, i) => (
+                  <li key={i} style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", fontSize: "14px" }}>
+                    {item.found ? <CheckCircle2 size={16} color="var(--accent)" /> : <XCircle size={16} color="var(--danger)" />}
+                    <span>{item.name}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
+
           <div style={{ display: "flex", gap: "var(--space-3)", marginTop: "var(--space-4)", flexWrap: "wrap" }}>
             <button className="sl-btn sl-btn--pri" onClick={handlePreview} disabled={!file || previewMutation.isPending}>
               {previewMutation.isPending ? (
@@ -118,18 +153,23 @@ export function Page1Import() {
                 th.uploadFile
               )}
             </button>
-            <a href="/api/templates/blank" className="sl-btn" download>
-              {th.downloadTemplate}
-            </a>
-            <a href="/api/samples/small" className="sl-btn" download>
-              {th.sampleSmall}
-            </a>
-            <a href="/api/samples/medium" className="sl-btn" download>
-              {th.sampleMedium}
-            </a>
-            <a href="/api/samples/large" className="sl-btn" download>
-              {th.sampleLarge}
-            </a>
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)", marginLeft: "auto" }}>
+              <span className="sl-label" style={{ fontSize: "12px" }}>เริ่มจากไฟล์ตัวอย่าง</span>
+              <div style={{ display: "flex", gap: "var(--space-3)" }}>
+                <a href="/api/templates/blank" className="sl-btn" download style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                  <Download size={16} /> {th.downloadTemplate}
+                </a>
+                <a href="/api/samples/small" className="sl-btn" download style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                  <Download size={16} /> {th.sampleSmall}
+                </a>
+                <a href="/api/samples/medium" className="sl-btn" download style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                  <Download size={16} /> {th.sampleMedium}
+                </a>
+                <a href="/api/samples/large" className="sl-btn" download style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                  <Download size={16} /> {th.sampleLarge}
+                </a>
+              </div>
+            </div>
           </div>
         </section>
       )}

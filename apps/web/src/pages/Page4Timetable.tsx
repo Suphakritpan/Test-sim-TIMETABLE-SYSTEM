@@ -110,7 +110,7 @@ export function Page4Timetable() {
     queryFn: () => runsApi.list(),
   });
 
-  const latestRunId = runs?.runs.find((r) => r.status === "verified")?.id || runs?.runs[0]?.id;
+  const latestRunId = runs?.runs?.find((r) => r.status === "verified")?.id || runs?.runs?.[0]?.id;
   const effectiveRunId = runId || latestRunId;
 
   // Fetch available keys for current view kind - using a special "list" key

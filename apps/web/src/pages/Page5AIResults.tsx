@@ -25,7 +25,7 @@ export function Page5AIResults() {
     enabled: !!selectedRunId,
   });
 
-  const verifiedRuns = runs?.runs.filter((r) => r.status === "verified") || [];
+  const verifiedRuns = runs?.runs?.filter((r) => r.status === "verified") || [];
 
   if (verifiedRuns.length === 0) {
     return (

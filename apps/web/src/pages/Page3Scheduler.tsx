@@ -101,7 +101,7 @@ export function Page3Scheduler() {
     window.location.href = `/timetable?runId=${id}`;
   };
 
-  const selectedRun = runs?.runs.find((r) => r.id === selectedRunId) || runs?.runs[0] || null;
+  const selectedRun = (runs?.runs || []).find((r) => r.id === selectedRunId) || runs?.runs?.[0] || null;
 
   if (isLoading) {
     return (
@@ -277,7 +277,7 @@ export function Page3Scheduler() {
       <section className="sl-card">
         <h3 className="sl-card__title" style={{ marginBottom: "var(--space-3)" }}>{th.runs}</h3>
 
-        {(!runs || runs.runs.length === 0) && (
+        {(!runs || !runs.runs || runs.runs.length === 0) && (
           <div className="sl-empty">
             <div className="sl-empty__ic" aria-hidden="true">⚙️</div>
             <h2>{th.noRuns}</h2>
@@ -285,7 +285,7 @@ export function Page3Scheduler() {
           </div>
         )}
 
-        {runs && runs.runs.length > 0 && (
+        {runs && runs.runs && runs.runs.length > 0 && (
           <div className="sl-tablewrap">
             <table className="sl-table">
               <thead>
