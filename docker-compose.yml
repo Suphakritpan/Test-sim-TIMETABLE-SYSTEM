@@ -1,0 +1,16 @@
+services:
+  algorithm:
+    build: ./algorithm
+    container_name: timetable-algorithm
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: timetable-frontend
+    depends_on:
+      - algorithm
+    ports:
+      - "3000:80"

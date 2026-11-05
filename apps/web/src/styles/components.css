@@ -1,0 +1,41 @@
+*, *::before, *::after { box-sizing: border-box; }
+.sl-ground { margin: 0; color: var(--ink); background: radial-gradient(900px 520px at 88% -8%, var(--accent-soft), transparent 62%), radial-gradient(760px 520px at -6% 104%, var(--amber-soft), transparent 60%), var(--bg); font-family: var(--font-sans); font-size: 15px; line-height: 24px; min-height: 100vh; }
+.sl-ground :where(h1, h2, h3, p) { margin: 0; }
+.sl-ground :where(a, button):focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.sl-mono { font-family: var(--font-mono); font-size: 13px; line-height: 20px; }
+.sl-label { color: var(--ink-3); font-size: 12px; line-height: 18px; }
+.sl-shell { display: grid; grid-template-columns: 248px minmax(0, 1fr); gap: var(--space-4); max-width: 1440px; margin: 0 auto; padding: var(--space-3); }
+.sl-rail { background: linear-gradient(170deg, var(--side-2), var(--side)); border-radius: var(--radius-2xl); color: var(--side-ink); display: flex; flex-direction: column; gap: var(--space-1); min-height: calc(100vh - var(--space-3) * 2); padding: var(--space-3); box-shadow: var(--shadow-2); }
+.sl-rail__brand { align-items: center; display: flex; gap: var(--space-2); margin-bottom: var(--space-5); padding: var(--space-1); }
+.sl-rail__mark { align-items: center; background: var(--accent); border-radius: var(--radius-lg); color: var(--on-accent); display: flex; font-size: 22px; font-weight: 600; height: 40px; justify-content: center; width: 40px; }
+.sl-rail__brand strong, .sl-rail__brand small { display: block; }
+.sl-rail__brand small { color: var(--side-ink-2); font-size: 12px; }
+.sl-rail a { border-radius: var(--radius-lg); color: var(--side-ink-2); padding: var(--space-2) var(--space-3); text-decoration: none; }
+.sl-rail a:hover, .sl-rail a[aria-current="page"] { background: var(--side-hi); color: var(--side-ink); }
+.sl-main { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; padding: var(--space-5) var(--space-4); }
+.sl-main__head { align-items: flex-start; display: flex; gap: var(--space-4); justify-content: space-between; }
+.sl-main__head h1 { font-size: 28px; line-height: 40px; font-weight: 600; }
+.sl-main__head p { color: var(--ink-2); margin-top: var(--space-1); }
+.sl-card { background: var(--glass); border: var(--border-std) solid var(--line); border-radius: var(--radius-2xl); box-shadow: var(--shadow-1); padding: var(--space-4); }
+.sl-empty { align-items: center; background: var(--glass-strong); border: var(--border-std) dashed var(--line-strong); border-radius: var(--radius-xl); display: flex; flex-direction: column; gap: var(--space-2); max-width: 680px; padding: var(--space-5) var(--space-4); text-align: center; }
+.sl-empty__ic { align-items: center; background: var(--accent-soft); border-radius: var(--radius-lg); color: var(--accent); display: grid; font-size: 22px; height: 48px; justify-content: center; width: 48px; }
+.sl-empty h2 { font-size: 22px; line-height: 32px; }
+.sl-help { color: var(--ink-2); }
+.sl-btn { align-items: center; background: var(--glass-strong); border: var(--border-std) solid var(--line-strong); border-radius: var(--radius-pill); color: var(--ink); cursor: pointer; display: inline-flex; font: inherit; font-size: 14px; font-weight: 600; gap: var(--space-2); min-height: 40px; padding: var(--space-2) var(--space-3); text-decoration: none; transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out); }
+.sl-btn:hover { box-shadow: var(--glow); transform: translateY(-1px); }
+.sl-btn--pri { background: var(--accent); border-color: transparent; color: var(--on-accent); }
+.sl-badge { align-items: center; border-radius: var(--radius-pill); display: inline-flex; font-size: 12px; font-weight: 600; gap: var(--space-1); padding: var(--space-1) var(--space-2); }
+.sl-badge--warn { background: var(--amber-soft); color: var(--amber-text); }
+.sl-enter { animation: sl-rise var(--dur-med) var(--ease-out) both; }
+@keyframes sl-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .sl-enter { animation: none; } }
+@media (max-width: 640px) {
+  .sl-shell { display: block; padding: var(--space-2); }
+  .sl-rail { min-height: auto; }
+  .sl-rail__brand { margin-bottom: var(--space-2); }
+  .sl-rail nav { display: flex; gap: var(--space-1); overflow-x: auto; }
+  .sl-rail a { white-space: nowrap; }
+  .sl-main { padding: var(--space-4) var(--space-3); }
+  .sl-main__head { display: block; }
+  .sl-main__head .sl-badge { margin-top: var(--space-3); }
+}

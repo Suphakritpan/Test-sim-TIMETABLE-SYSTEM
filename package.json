@@ -1,0 +1,16 @@
+{
+  "name": "slotline",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "apps/api",
+    "packages/*"
+  ],
+  "scripts": {
+    "lint": "npm run lint --workspace apps/web",
+    "typecheck": "npm run typecheck --workspace apps/web",
+    "test": "npm run test --workspace apps/web",
+    "test:api": "npm run test --workspace apps/api",
+    "build": "npm run build --workspace apps/web"
+  }
+}
