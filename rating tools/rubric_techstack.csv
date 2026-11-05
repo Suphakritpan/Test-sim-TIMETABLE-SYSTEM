@@ -13,5 +13,5 @@
 "TT12","Exports","CSV/XLSX/PDF exports","Export writers for CSV, XLSX and PDF exist or are declared","recommended","3","manifest"
 "TT13","Persistence","Repository boundary","JSON-first storage behind a small repository interface so SQLite can be added without touching the scheduler or API","required","4","source-scan"
 "TT14","Conventions","Explicit dependency manifests","Dependencies declared per manifest with a lockfile; no undeclared or global deps","required","4","manifest"
-"TT15","Conventions","Local run is independent","A documented local run needs neither the website nor a remote service","required","4","docs+manifest"
+"TT15","Conventions","Local and container runs","Local modules run without the website or remote service; Dockerfile and Compose document reproducible ingest, test, and development runs","required","4","docs+manifest+container"
 "TT16","Conventions","Stack/contract changes documented","README stack section stays current and every change is recorded in log.md","recommended","2","docs"

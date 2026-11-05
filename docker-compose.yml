@@ -1,0 +1,39 @@
+services:
+  # Default: run the ingest pipeline, writing artifacts to ./output on the host.
+  ingest:
+    build: .
+    image: timetable-system
+    command: npm run ingest
+    volumes:
+      - ./output:/app/output
+
+  # Full test suite (validator + rating tools + ingest + engine).
+  test:
+    build: .
+    image: timetable-system
+    command: npm test
+    profiles: ["test"]
+
+  # Vite dev server for the frontend prototype, bound to all interfaces inside the container.
+  dev:
+    build: .
+    image: timetable-system
+    command: npm run dev -- --host 0.0.0.0
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./src:/app/src
+      - ./index.html:/app/index.html
+      - ./vite.config.mjs:/app/vite.config.mjs
+    profiles: ["dev"]
+
+  # Engine smoke run: needs the canonical package and a teacher assignment map.
+  engine:
+    build: .
+    image: timetable-system
+    command: >
+      sh -lc "node src/engine/cli.mjs --input output/canonical.json
+      --assignments output/assignments.json --out output/engine-result.json"
+    volumes:
+      - ./output:/app/output
+    profiles: ["engine"]

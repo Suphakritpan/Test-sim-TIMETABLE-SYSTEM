@@ -2,7 +2,7 @@
 
 Scanned root: `/home/beggardev/Desktop/Test-sim-TIMETABLE-SYSTEM`
 
-**Score 63/100 (63%) — NOT YET CONFORMANT — blocker items not built or only partial**
+**Score 67/100 (67%) — NOT YET CONFORMANT — blocker items not built or only partial**
 
 Blockers not yet satisfied: TT4
 
@@ -13,7 +13,7 @@ Blockers not yet satisfied: TT4
 | TT3 | blocker | PASS | 8/8 | Single backend language |
 | TT4 | blocker | ABSENT | 0/10 | Express is the solver/backend server |
 | TT5 | required | PARTIAL | 7/10 | Reusable rule/solver modules |
-| TT6 | required | PARTIAL | 5/8 | Locally callable without the server |
+| TT6 | required | PASS | 8/8 | Locally callable without the server |
 | TT7 | required | PASS | 8/8 | React + Vite in plain JavaScript |
 | TT8 | required | PARTIAL | 1/6 | Frontend consumes the shared API contract |
 | TT9 | required | ABSENT | 0/8 | Same routes and shapes with deterministic fixtures |
@@ -22,8 +22,8 @@ Blockers not yet satisfied: TT4
 | TT12 | recommended | PARTIAL | 1/3 | CSV/XLSX/PDF exports |
 | TT13 | required | ABSENT | 0/4 | Repository boundary |
 | TT14 | required | PASS | 4/4 | Explicit dependency manifests |
-| TT15 | required | PASS | 4/4 | Local run is independent |
-| TT16 | recommended | PARTIAL | 1/2 | Stack/contract changes documented |
+| TT15 | required | PASS | 4/4 | Local and container runs |
+| TT16 | recommended | PASS | 2/2 | Stack/contract changes documented |
 
 ## Evidence per item
 
@@ -52,10 +52,9 @@ Requirement: Rules, scheduling, validation and import/export live in separate mo
 - validation: conflict tools/validate.mjs, conflict tools/validate.test.mjs
 - ingest/import: src/ingest, src/ingest/cli.mjs, src/ingest/index.mjs, src/ingest/ingest.test.mjs, src/ingest/read-workbook.mjs
 
-### TT6 — Locally callable without the server  ·  PARTIAL (5/8)
+### TT6 — Locally callable without the server  ·  PASS (8/8)
 Requirement: A CLI entry (bin or npm script) runs the scheduler with no API or website
-- standalone entry: conflict tools/cli.mjs, src/engine/cli.mjs, src/ingest/cli.mjs
-- no npm script or bin wired to it yet
+- npm scripts: engine
 
 ### TT7 — React + Vite in plain JavaScript  ·  PASS (8/8)
 Requirement: React and Vite declared; vite config present; no TSX sources
@@ -98,14 +97,17 @@ Requirement: Dependencies declared per manifest with a lockfile; no undeclared o
 - package.json declares 5 dependencies
 - lockfile: package-lock.json
 
-### TT15 — Local run is independent  ·  PASS (4/4)
-Requirement: A documented local run needs neither the website nor a remote service
+### TT15 — Local and container runs  ·  PASS (4/4)
+Requirement: Local modules run without the website or remote service; Dockerfile and Compose document reproducible ingest, test, and development runs
 - npm scripts available: build, check:stack, dev, engine, ingest, preview, score:criteria, test
 - README documents a local run path
+- Dockerfile defines a container image
+- docker-compose.yml and documented Docker Compose commands provide container workflows
 
-### TT16 — Stack/contract changes documented  ·  PARTIAL (1/2)
+### TT16 — Stack/contract changes documented  ·  PASS (2/2)
 Requirement: README stack section stays current and every change is recorded in log.md
 - README has a Shared tech stack section
+- log.md records change entries
 
 ## Notes
 

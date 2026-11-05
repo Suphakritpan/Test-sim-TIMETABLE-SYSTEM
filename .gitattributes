@@ -1,0 +1,12 @@
+# Normalize line endings so the repo behaves the same on Windows, macOS and Linux.
+* text=auto eol=lf
+
+# Binary sources must never be converted
+*.pdf binary
+*.xlsx binary
+*.png binary
+*.jpg binary
+*.ico binary
+
+# Shell scripts (if added later) keep LF
+*.sh text eol=lf

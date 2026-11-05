@@ -59,7 +59,7 @@ the build non-conformant), **required**, **recommended**.
 | TT12 | CSV/XLSX/PDF exports | recommended | 3 |
 | TT13 | Repository boundary (JSON first, SQLite addable) | required | 4 |
 | TT14 | Explicit manifests + lockfile | required | 4 |
-| TT15 | Local run independent of website/remote | required | 4 |
+| TT15 | Local run and Docker/Compose workflows | required | 4 |
 | TT16 | Stack/contract changes documented | recommended | 2 |
 
 ### Verdict semantics
@@ -98,28 +98,31 @@ inflate a total. `check_techstack.mjs` exits 0 when conformant, 1 otherwise, and
 usage or input error. Both use only Node.js built-ins and run independently of Express,
 the website, or a remote service.
 
-## Current rating — 2026-11-05 (after ingest landed)
+## Current rating — 2026-11-05 (engine and Docker workflows)
 
-**61/100 — NOT YET CONFORMANT.** TT4 (Express backend) is the only unsatisfied blocker; there are
-no blocker *violations*. Ingest is implemented; the solver, API, mock and exporters are not.
+**67/100 — NOT YET CONFORMANT.** TT4 (Express backend) is the unsatisfied blocker. Ingest,
+the initial local Engine slice, and Docker/Compose workflows exist; API/mock integration,
+exports, and the live Review Process page remain incomplete.
 
 What conforms:
 
 - **TT1 (8/8)** — `package.json` pins `engines.node >=22.12.0`.
 - **TT2 (10/10)** — plain JavaScript ES modules (`.mjs`); no TypeScript sources.
 - **TT3 (8/8)** — no second backend language in the product tree.
+- **TT6 (8/8)** — `npm run engine` and the standalone engine CLI run without the server.
 - **TT7 (8/8)** — React + Vite declared, Vite config, plain JS/JSX sources.
 - **TT10 (4/4)** — canonical schema module `src/ingest/schema.mjs` + JSON contract.
 - **TT14 (4/4)** — dependencies declared, lockfile committed.
-- **TT15 (4/4)** — local run scripts need no remote service.
-- **TT16 (2/2)** — stack and changes documented.
+- **TT15 (4/4)** — local scripts, Dockerfile, and documented Compose workflows are present.
+- **TT16 (2/2)** — stack and changes documented in README and `plans/log.md`.
 
-Partial: **TT5 (4/10)** ingest + validation modules exist, rules/solver do not; **TT6 (5/8)**
-`src/ingest/cli.mjs` and `npm run ingest` work but there is no `bin` entry (TT6 wants a wired
-entry point); **TT8 (1/6)** the React shell makes no `/api/` calls yet; **TT11 (2/3)** hand-written
-boundary validation instead of a schema library; **TT12 (1/3)** `xlsx` only, no PDF/CSV exporter.
+Partial: **TT5 (7/10)** reusable ingest, solver, and validation modules exist, while a dedicated
+rules module and export writers remain; **TT8 (1/6)** the React shell makes no `/api/` calls yet;
+**TT11 (2/3)** hand-written boundary validation instead of a schema library; **TT12 (1/3)** XLSX
+support exists, but CSV/PDF exporters do not.
 
-Absent: **TT4** Express, **TT9** mock backend + fixtures, **TT13** repository boundary.
+Absent: **TT4** Express, **TT9** BeggarDev mock with matching fixtures, and **TT13** the repository
+boundary.
 
 ### Verdict semantics that changed in this pass
 

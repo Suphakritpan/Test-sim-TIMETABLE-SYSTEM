@@ -246,7 +246,7 @@ function checkTT6(root, pkg) {
   }
   const scripts = pkg?.scripts || {};
   const local = Object.keys(scripts).filter((name) =>
-    ["solve", "schedule", "cli", "generate", "build:timetable", "import"].includes(name.toLowerCase()));
+    ["solve", "schedule", "engine", "cli", "generate", "build:timetable", "import"].includes(name.toLowerCase()));
   if (local.length) return ["PASS", 8, [`npm scripts: ${local.join(", ")}`]];
   const entries = sourceFiles(root).filter((path) =>
     extname(path) !== ".jsx"
@@ -457,12 +457,23 @@ function checkTT15(root, pkg) {
   const docs = existsSync(readme) ? readText(readme).toLowerCase() : "";
   if (Object.keys(scripts).length) {
     evidence.push(`npm scripts available: ${Object.keys(scripts).sort().join(", ")}`);
-    earned += 2;
+    earned += 1;
   }
   if (/local|without (the )?(website|server|api)/.test(docs)) {
     evidence.push("README documents a local run path");
-    earned += 2;
+    earned += 1;
   }
+  if (existsSync(join(root, "Dockerfile"))) {
+    evidence.push("Dockerfile defines a container image");
+    earned += 1;
+  }
+  const compose = ["docker-compose.yml", "docker-compose.yaml", "compose.yml", "compose.yaml"]
+    .find((file) => existsSync(join(root, file)));
+  if (compose && /docker compose/.test(docs)) {
+    evidence.push(`${compose} and documented Docker Compose commands provide container workflows`);
+    earned += 1;
+  } else if (!compose) evidence.push("Docker Compose configuration not found");
+  else evidence.push("Docker Compose commands not documented in README");
   if (!evidence.length) return ["ABSENT", 0, ["no scripts and no local-run documentation"]];
   return [status(earned, 4), earned, evidence];
 }
@@ -475,8 +486,9 @@ function checkTT16(root) {
     evidence.push("README has a Shared tech stack section");
     earned += 1;
   }
-  const log = join(root, "log.md");
-  if (existsSync(log) && readText(log).split(/\r?\n/).length > 5) {
+  const log = [join(root, "plans", "log.md"), join(root, "log.md")]
+    .find((path) => existsSync(path));
+  if (log && readText(log).split(/\r?\n/).length > 5) {
     evidence.push("log.md records change entries");
     earned += 1;
   }

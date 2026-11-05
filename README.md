@@ -25,7 +25,7 @@ Component references:
 - **Engine:** first implementation slice exists: canonical model/block expansion, required explicit teacher mapping, deterministic MRV placement, and independent validation. The current workbook still blocks a run because Q2 has no teacher assignments; Q3 also identifies a fixed shared-room collision. Do not describe this as an accepted schedule generator yet.
 - **Frontend:** interactive workflow shell exists; real ingest/API/schedule/review data is not wired in.
 - **Backend/mock/exports:** Express routes, BeggarDev's deterministic mock integration, and timetable export flow remain to be built.
-- **Tech-stack rating:** latest report is 63/100, **NOT YET CONFORMANT**; Express (TT4) is the remaining blocker. Treat the score as provisional: the checker does not recognize the existing `npm run engine` script for TT6 and reports that no script is wired.
+- **Tech-stack rating:** see the latest generated score in `rating tools/reports/techstack-report.md`; Express (TT4) remains the blocker until the API server is implemented.
 - **Review page:** the agreed charts, switchable matrices, data contract, and acceptance requirements are in `plans/review-page-requirement.md`.
 
 The latest implementation truth is in `plans/handoff.md`; older status entries in `plans/log.md` are historical snapshots.
@@ -38,6 +38,7 @@ Agents should use this stack across local, mock, and website work so components 
 - **Solver and backend:** Express. Keep timetable rules, scheduling, validation, and file import/export in reusable JavaScript modules so the logic can run locally and through the API.
 - **Website:** React with plain JavaScript, built with Vite. The website should call the shared API contract rather than duplicate scheduling rules or rating calculations.
 - **Mock backend:** BeggarDev owns this component. Use the same Express routes and response shapes as the real backend, backed by deterministic JSON fixtures.
+- **Containerization:** Docker and Docker Compose provide repeatable local ingest, test, development, and engine workflows. The image includes `pdftotext` and runs as a non-root user.
 - **Data and storage:** JSON for API payloads and fixtures; start JSON-first behind a repository boundary so SQLite can be added without changing the scheduler or API contract. Provide CSV, XLSX, and PDF exports as the product requires.
 - **Dependencies:** keep dependencies explicit in manifests and lockfiles. Document any proposed stack change in this README and `plans/log.md`.
 
@@ -59,6 +60,39 @@ The engine CLI requires an explicit JSON mapping of every subject ID to a teache
 does not infer missing teacher assignments. Its deterministic search returns a schedule
 only after the independent H1–H20 validator accepts it; owner questions and the rating
 bridge remain separate acceptance work.
+
+## Docker
+
+The image is `node:22-bookworm-slim` plus `poppler-utils` (so `pdftotext` exists), runs as a
+non-root user, and carries the whole project. This is the recommended way to run the project on
+Windows, because it removes both platform differences at once (Poppler and line endings).
+
+```sh
+docker build -t timetable-system .                              # build
+docker run --rm -v "$PWD/output:/app/output" timetable-system    # npm run ingest (default CMD)
+docker compose --profile test run --rm test                      # full suite
+docker compose --profile dev up dev                              # Vite on http://localhost:5173
+docker compose --profile engine run --rm engine                  # engine run (needs output/assignments.json)
+```
+
+On Windows PowerShell, mount with `-v "${PWD}\output:/app/output"`. Generated artifacts land in
+`output/` on the host through the mount; the container itself is disposable.
+
+## Windows notes
+
+The code is portable: paths go through `node:path`, the only subprocess is `pdftotext` (launched
+with an argument array, never a shell string), and tests use `os.tmpdir()`. Two things differ:
+
+- **`pdftotext` is not shipped with Windows.** Install Poppler (`scoop install poppler`,
+  `choco install poppler -y`), or skip it with the supported fallback:
+  `node src/ingest/cli.mjs --guideline-text output/guideline.txt --xlsx "start folder\data.xlsx" --out output`.
+  That path is verified and produces the same package body; only the `sources` block records
+  `format: "text"` instead of `"pdf"`.
+- **Line endings and console encoding.** `.gitattributes` forces LF in the working tree so the
+  CRLF autocrlf setting cannot break the byte-for-byte ingest determinism. Thai text in `cmd.exe`
+  may need `chcp 65001` to display correctly; the files are UTF-8 either way.
+
+Docker Desktop with Linux containers avoids both. Node 22.12+ is required natively.
 
 ## Documentation and change logging
 

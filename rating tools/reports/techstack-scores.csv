@@ -4,7 +4,7 @@ TT2,10,"package.json ""type"": ""module"" (ES modules) | 20 JS-family sources, n
 TT3,8,product tree is JavaScript only (20 sources; rating tools/ excluded as tooling)
 TT4,0,express not declared and no server source — backend not started yet
 TT5,7,"rules/constraints: not found | solver/scheduling: src/engine/solver.mjs | validation: conflict tools/validate.mjs, conflict tools/validate.test.mjs | ingest/import: src/ingest, src/ingest/cli.mjs, src/ingest/index.mjs, src/ingest/ingest.test.mjs, src/ingest/read-workbook.mjs"
-TT6,5,"standalone entry: conflict tools/cli.mjs, src/engine/cli.mjs, src/ingest/cli.mjs | no npm script or bin wired to it yet"
+TT6,8,npm scripts: engine
 TT7,8,react ^19.1.1 declared | vite declared | vite config present | no TSX sources (plain JS/JSX)
 TT8,1,16 frontend source files | no /api/* calls found in frontend | possible duplicated rules in frontend: double-book
 TT9,0,no mock/ or fixtures/ directory — mock backend not started
@@ -13,5 +13,5 @@ TT11,2,hand-written validation module: conflict tools/validate.mjs | no schema l
 TT12,1,xlsx: xlsx
 TT13,0,no repository/store module found | no repository boundary yet — JSON is written directly by modules
 TT14,4,package.json declares 5 dependencies | lockfile: package-lock.json
-TT15,4,"npm scripts available: build, check:stack, dev, engine, ingest, preview, score:criteria, test | README documents a local run path"
-TT16,1,README has a Shared tech stack section
+TT15,4,"npm scripts available: build, check:stack, dev, engine, ingest, preview, score:criteria, test | README documents a local run path | Dockerfile defines a container image | docker-compose.yml and documented Docker Compose commands provide container workflows"
+TT16,2,README has a Shared tech stack section | log.md records change entries

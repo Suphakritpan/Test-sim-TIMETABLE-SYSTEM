@@ -11,6 +11,7 @@ Build a timetable scheduler for local, mock, and website use. The flow is **PDF/
 | Area | Current status | Evidence / location |
 |---|---|---|
 | Shared runtime | Node.js ES modules, plain JavaScript, React/Vite dependencies and lockfile exist. | `package.json`, `package-lock.json` |
+| Docker | Image and Compose services build; the container test service passes, and default Compose ingest writes canonical JSON/report using containerized `pdftotext`. | `Dockerfile`, `docker-compose.yml` |
 | Ingest | Implemented as a reusable local CLI/core. It extracts guideline text with `pdftotext`, reads XLSX, maps/validates records, and writes canonical JSON plus an import report. | `src/ingest/`; `npm run ingest` |
 | Ingest acceptance | Mechanically passes expected counts and deterministic output, but owner decisions remain open and a deliberately corrupted workbook fixture is not covered. Overall status is **PARTIAL**. | `development-journey.md` J1.10 |
 | Conflict validator | Independent H1–H20 schedule validator and CLI exists. It validates a candidate; it does not generate one. | `conflict tools/` |
@@ -19,7 +20,7 @@ Build a timetable scheduler for local, mock, and website use. The flow is **PDF/
 | Frontend | React/Vite workflow prototype exists with local file-selection and readiness UI. It is not wired to ingest, an API, a scheduler, or live review data. | `src/App.jsx`, `src/styles.css` |
 | Express/API and mock | Not implemented. BeggarDev owns the mock; its routes and fixtures must match the eventual API contract. | TT4 remains an open blocker |
 | Schedule exports and Review Process page | Requirements are documented; live schedule exports, API-backed matrices/charts, and review data integration are not implemented. | `review-page-requirement.md` |
-| Tech-stack score | Latest report: **63/100, NOT YET CONFORMANT**; TT4 (Express backend) is the unsatisfied blocker. Treat the score as provisional because the checker does not recognize the existing `npm run engine` script for TT6. | `rating tools/reports/techstack-report.md`, `package.json`, `rating tools/check_techstack.mjs` |
+| Tech-stack score | Latest report: **67/100, NOT YET CONFORMANT**; TT4 (Express backend) is the unsatisfied blocker. TT6 and TT15 account for the local engine CLI and Docker/Compose workflows. | `rating tools/reports/techstack-report.md` |
 
 The detailed, evidence-based work sequence is [`development-journey.md`](development-journey.md). Do not describe the Engine as complete just because its plan and independent validator exist.
 
@@ -53,8 +54,8 @@ Latest verification checked during this status review:
 
 - `npm test`: 46 tests passed across validator, rating tools, Ingest, and Engine.
 - `npm run build`: passed.
-- `npm run check:stack`: latest report is 63/100; it exits nonzero because Express TT4 remains a blocker. TT6 evidence is stale because the checker does not include the `engine` script name among recognized local CLI scripts.
-- The sandbox initially blocked the validator test's spawned Node process with `EPERM`; the full suite passed 46/46 when rerun outside the sandbox.
+- `npm run check:stack`: refreshed the report to 67/100; it exits nonzero because Express TT4 remains a blocker.
+- Docker Compose config and image build passed; `docker compose --profile test run --rm test` passed 46/46, and `docker compose run --rm ingest` produced the canonical package and import report.
 - The engine CLI/core was checked against `output/canonical.json`: it correctly blocks because all 33 subject-to-teacher assignments are absent (Q2).
 - The most recent recorded ingest produced 33 subjects, 6 groups, 5 teachers, 6 rooms, 13 pins, and 22 rule records; two generated JSON/report runs were byte-identical.
 
